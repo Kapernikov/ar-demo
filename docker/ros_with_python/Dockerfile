@@ -73,18 +73,31 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python-rosinstall \
     python-vcstools \
     python-pip \
+    python-zmq \
     && rm -rf /var/lib/apt/lists/*
 
 #RUN python2 -m pip install ipykernel
 #RUN python2 -m ipykernel install --user
+
+#RUN apt-get install eclipse eclipse-cdt eclipse-jdt
+
+
+### install eclipse neon
+RUN cd /opt \
+	&& wget 'http://mirror.ibcp.fr/pub/eclipse//technology/epp/downloads/release/neon/2/eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz' \
+	&& tar -zxf eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
+	&& rm eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
+	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
+
 
 
 # bootstrap rosdep
 RUN rosdep init \
     && rosdep update
 
+RUN echo "deb http://http.debian.net/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
 ENV ROS_DISTRO kinetic
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y openjdk-8-jdk \
     ros-kinetic-ros-core=1.3.0-0* \
     && rm -rf /var/lib/apt/lists/*
 
