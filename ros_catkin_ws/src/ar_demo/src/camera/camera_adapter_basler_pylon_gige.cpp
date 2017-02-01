@@ -329,6 +329,7 @@ namespace ar_demo {
   bool BaslerPylonGigECameraAdapter::stopStreaming() {
     if(camera_is_initialised_) {
       camera_->StopGrabbing();
+			camera_is_streaming_ = false;
       ROS_INFO("Camera '%s' stopped grabbing and streaming.", camera_name_.c_str());
       return true;
     }
