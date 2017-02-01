@@ -72,7 +72,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python-rosdep \
     python-rosinstall \
     python-vcstools \
+    python-pip \
     && rm -rf /var/lib/apt/lists/*
+
+#RUN python2 -m pip install ipykernel
+#RUN python2 -m ipykernel install --user
 
 
 # bootstrap rosdep
