@@ -1,0 +1,4 @@
+string reference
+bool stream
+bool reset_to_default_settings
+float64 adjust_target_brightness

@@ -1,0 +1,170 @@
+####################################################################################################
+#
+# Algorithm settings.
+#
+
+
+
+####################################################################################################
+#
+# Camera definitions, independent of the AGV or their position on the AGV:
+#   - Hardware, to select driver and connect to camera
+#   - Exposure settings.
+#
+
+camera_info_url: package://ar_demo/calibrations/camera_${NAME}.yaml
+
+camera:
+    aca1920_40uc_21781603:
+        hardware:
+            driver: 'BaslerPylonUsb'
+            model: 'acA1920-40uc' # Just remove if you want to use any model.
+            serialnumber: '21781603' # Just remove if you want to use any serial number.
+            # userdefinedname: '' # Just remove if you want to use any user defined name.
+            mode: 'color'
+            image_transmission_us: 30000
+            aperture: 2.0 # to estimate light level in lux
+            ev_correction: -0.5
+        settings:
+            binning:
+                x: 1
+                y: 1
+            # Framerate.
+            fps: 10.0
+            # Auto exposure settings
+            auto:
+                enable: true
+                # Exposure time tussen kleine marge in de buurt van een lichtnet periode
+                exposure_us_min: 500.0
+                exposure_us_max: 20000.0
+                gain_db_min: 0
+                gain_db_max: 36 # USB Basler camera maximum 36
+                target_brightness: 0.80
+            # Manual exposure settings (used if ae/enable != true).
+            manual:
+                exposure_us: 20000.0 # Default 60000
+                gain_db: 20.0 # Default 1.0
+                # Pylon 4 preset Tungsten (2800K) => R: 1.16968, G: 1.0, B: 3.45972
+                # Pylon 4 preset Daylight (5000K) => R: 1.7395, G: 1.0, B: 1.96069
+                # Pylon 4 preset Daylight (6500K) => R: 1.94458, G: 1.0, B: 1.71997
+                balance_red: 2.0
+                balance_green: 1.0
+                balance_blue: 2.0
+            limits:
+                gain_db_max: 36.0
+                illuminance_lux_min: 500.0
+    aca1920_40uc_21781605:
+        hardware:
+            driver: 'BaslerPylonUsb'
+            model: 'acA1920-40uc' # Just remove if you want to use any model.
+            serialnumber: '21781605' # Just remove if you want to use any serial number.
+            # userdefinedname: '' # Just remove if you want to use any user defined name.
+            mode: 'color'
+            image_transmission_us: 30000
+            aperture: 2.0 # to estimate light level in lux
+            ev_correction: -0.5
+        settings:
+            binning:
+                x: 1
+                y: 1
+            # Framerate.
+            fps: 10.0
+            # Auto exposure settings
+            auto:
+                enable: true
+                # Exposure time tussen kleine marge in de buurt van een lichtnet periode
+                exposure_us_min: 500.0
+                exposure_us_max: 20000.0
+                gain_db_min: 0
+                gain_db_max: 36 # USB Basler camera maximum 36
+                target_brightness: 0.80
+            # Manual exposure settings (used if ae/enable != true).
+            manual:
+                exposure_us: 20000.0 # Default 60000
+                gain_db: 20.0 # Default 1.0
+                # Pylon 4 preset Tungsten (2800K) => R: 1.16968, G: 1.0, B: 3.45972
+                # Pylon 4 preset Daylight (5000K) => R: 1.7395, G: 1.0, B: 1.96069
+                # Pylon 4 preset Daylight (6500K) => R: 1.94458, G: 1.0, B: 1.71997
+                balance_red: 2.0
+                balance_green: 1.0
+                balance_blue: 2.0
+            limits:
+                gain_db_max: 36.0
+                illuminance_lux_min: 500.0
+    aca1920_150uc_21917526:
+        hardware:
+            driver: 'BaslerPylonUsb'
+            model: 'acA1920-150uc' # Just remove if you want to use any model.
+            serialnumber: '21917526' # Just remove if you want to use any serial number.
+            # userdefinedname: '' # Just remove if you want to use any user defined name.
+            mode: 'color'
+            image_transmission_us: 6000
+            aperture: 2.0 # to estimate light level in lux
+            ev_correction: 0 # NOTE: not calibrated
+        settings:
+            binning:
+                x: 1
+                y: 1
+            # Framerate.
+            fps: 10.0
+            # Auto exposure settings
+            auto:
+                enable: true
+                # Exposure time tussen kleine marge in de buurt van een lichtnet periode
+                exposure_us_min: 500.0
+                exposure_us_max: 20000.0
+                gain_db_min: 0.0
+                gain_db_max: 12.0
+                target_brightness: 0.80
+            # Manual exposure settings (used if ae/enable != true).
+            manual:
+                exposure_us: 20000.0 # Default 60000
+                gain_db: 10.0 # Default 1.0
+                # Pylon 4 preset Tungsten (2800K) => R: 1.16968, G: 1.0, B: 3.45972
+                # Pylon 4 preset Daylight (5000K) => R: 1.7395, G: 1.0, B: 1.96069
+                # Pylon 4 preset Daylight (6500K) => R: 1.94458, G: 1.0, B: 1.71997
+                balance_red: 2.0
+                balance_green: 1.0
+                balance_blue: 2.0
+            limits:
+                gain_db_max: 36.0
+                illuminance_lux_min: 500.0
+    aca1920_150uc_21917539:
+        hardware:
+            driver: 'BaslerPylonUsb'
+            model: 'acA1920-150uc' # Just remove if you want to use any model.
+            serialnumber: '21917539' # Just remove if you want to use any serial number.
+            # userdefinedname: '' # Just remove if you want to use any user defined name.
+            mode: 'color'
+            image_transmission_us: 6000
+            aperture: 2.0 # to estimate light level in lux
+            ev_correction: 0 # NOTE: not calibrated
+        settings:
+            binning:
+                x: 1
+                y: 1
+            # Framerate.
+            fps: 10.0
+            # Auto exposure settings
+            auto:
+                enable: true
+                # Exposure time tussen kleine marge in de buurt van een lichtnet periode
+                exposure_us_min: 500.0
+                exposure_us_max: 20000.0
+                gain_db_min: 0.0
+                gain_db_max: 12.0
+                target_brightness: 0.80
+            # Manual exposure settings (used if ae/enable != true).
+            manual:
+                exposure_us: 20000.0 # Default 60000
+                gain_db: 10.0 # Default 1.0
+                # Pylon 4 preset Tungsten (2800K) => R: 1.16968, G: 1.0, B: 3.45972
+                # Pylon 4 preset Daylight (5000K) => R: 1.7395, G: 1.0, B: 1.96069
+                # Pylon 4 preset Daylight (6500K) => R: 1.94458, G: 1.0, B: 1.71997
+                balance_red: 2.0
+                balance_green: 1.0
+                balance_blue: 2.0
+            limits:
+                gain_db_max: 12.0
+                illuminance_lux_min: 500.0
+

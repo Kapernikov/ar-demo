@@ -1,0 +1,20 @@
+image_width: 1920
+image_height: 1200
+camera_name: aca1920_40uc_21781605
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [1395.853965935547, 0, 956.5378904100035, 0, 1385.342256265561, 609.530730015699, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.164098281762186, 0.04010918410870091, -0.0003229344492515016, -0.001247104436020037, 0.08566997436328262]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [1395.853965935547, 0, 956.5378904100035, 0, 0, 1385.342256265561, 609.530730015699, 0, 0, 0, 1, 0]

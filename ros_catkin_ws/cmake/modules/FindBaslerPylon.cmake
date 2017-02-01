@@ -1,0 +1,178 @@
+# - Try to find the Basler Pylon library.
+#
+# This module defines the following variables
+#
+# BASLERPYLON_FOUND - Basler Pylon found?
+# BASLERPYLON_INCLUDE_DIRS - The Basler Pylon and GenICam include directories.
+# BASLERPYLON_LIBRARIES - All Basler Pylon and GenICam libraries.
+#
+# Maarten De Munck <maarten@vijfendertig.be>
+#
+
+
+#
+# Base include directory.
+#
+find_path(BASLERPYLON_INCLUDE_DIR NAMES pylon/PylonIncludes.h
+    HINTS
+    $ENV{PYLON_ROOT}/include
+    /opt/pylon5/include
+    /opt/pylon4/include
+)
+mark_as_advanced(BASLERPYLON_INCLUDE_DIR)
+
+#
+# Pylon version.
+#
+if(BASLERPYLON_INCLUDE_DIR) 
+    set(BASLERPYLON_VERSION_MAJOR 0)
+    set(BASLERPYLON_VERSION_MINOR 0)
+    set(BASLERPYLON_VERSION_SUBMINOR 0)
+    set(BASLERPYLON_VERSION_BUILD 0)
+    if(EXISTS "${BASLERPYLON_INCLUDE_DIR}/pylon/PylonVersionNumber.h")
+        file(STRINGS "${BASLERPYLON_INCLUDE_DIR}/pylon/PylonVersionNumber.h" _PylonVersionNumber REGEX "#define PYLON_VERSION_[A-Z]+ ")
+        string(REGEX REPLACE ".*#define PYLON_VERSION_MAJOR[ \t]+([0-9]+).*" "\\1" BASLERPYLON_VERSION_MAJOR "${_PylonVersionNumber}")
+        string(REGEX REPLACE ".*#define PYLON_VERSION_MINOR[ \t]+([0-9]+).*" "\\1" BASLERPYLON_VERSION_MINOR "${_PylonVersionNumber}")
+        string(REGEX REPLACE ".*#define PYLON_VERSION_SUBMINOR[ \t]+([0-9]+).*" "\\1" BASLERPYLON_VERSION_SUBMINOR "${_PylonVersionNumber}")
+        string(REGEX REPLACE ".*#define PYLON_VERSION_BUILD[ \t]+([0-9]+).*" "\\1" BASLERPYLON_VERSION_BUILD "${_PylonVersionNumber}")
+        unset(_PylonVersionNumber)
+    endif()
+    set(BASLERPYLON_VERSION_STRING "${BASLERPYLON_VERSION_MAJOR}.${BASLERPYLON_VERSION_MINOR}.${BASLERPYLON_VERSION_SUBMINOR}")
+endif () 
+mark_as_advanced(BASLERPYLON_VERSION_MAJOR BASLERPYLON_VERSION_MINOR
+    BASLERPYLON_VERSION_SUBMINOR BASLERPYLON_VERSION_BUILD)
+
+#
+# Search additional include files and libraries based on major version.
+#
+if(BASLERPYLON_VERSION_MAJOR EQUAL 4)
+
+	#
+	# Additional include directories.
+	#
+	find_path(GENICAM_INCLUDE_DIR NAMES GenICam.h
+	    HINTS
+	    $ENV{GENICAM_ROOT_V2_3}/library/CPP/include
+	    $ENV{PYLON_ROOT}/genicam/library/CPP/include
+	    /opt/pylon4/genicam/library/CPP/include
+	)
+	mark_as_advanced(GENICAM_INCLUDE_DIR)
+
+	#
+	# Libraries.
+	#
+	macro(_FIND_BASLERPYLON_LIBRARY _var)
+	    find_library(${_var}
+		NAMES ${ARGN}
+		HINTS
+		    $ENV{PYLON_ROOT}/lib64 $ENV{PYLON_ROOT}/lib32 $ENV{PYLON_ROOT}/lib
+		    /opt/pylon4/lib64 /opt/pylon4/lib32 /opt/pylon4/lib
+	    )
+	    mark_as_advanced(${_var})
+	endmacro()
+	macro(_FIND_GENICAM_LIBRARY _var)
+	    find_library(${_var}
+		NAMES ${ARGN}
+		HINTS
+		    $ENV{GENICAM_ROOT_V2_3}/bin/Linux64_x64
+		    $ENV{PYLON_ROOT}/genicam/bin/Linux64_x64
+		    /opt/pylon4/genicam/bin/Linux64_x64
+	    )
+	    mark_as_advanced(${_var})
+	endmacro()
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_GXAPI_LIBRARY gxapi libgxapi)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_BASE_LIBRARY pylonbase libpylonbase)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_GIGESUPP_LIBRARY pylongigesupp libpylongigesupp)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_UTILITY_LIBRARY pylonutility libpylonutility)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_UXAPI_LIBRARY uxapi libuxapi)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_CAMEMU_LIBRARY pyloncamemu libpyloncamemu)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_GIGE_LIBRARY pylongige libpylongige)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_USB_LIBRARY pylonusb libpylonusb)
+	_FIND_GENICAM_LIBRARY(GENICAM_API_LIBRARY GenApi_gcc40_v2_3 libGenApi_gcc40_v2_3)
+	_FIND_GENICAM_LIBRARY(GENICAM_BASE_LIBRARY GCBase_gcc40_v2_3 libGCBase_gcc40_v2_3)
+	_FIND_GENICAM_LIBRARY(GENICAM_LOG_LIBRARY Log_gcc40_v2_3 libLog_gcc40_v2_3)
+	_FIND_GENICAM_LIBRARY(GENICAM_LOG4CPP_LIBRARY log4cpp_gcc40_v2_3 liblog4cpp_gcc40_v2_3)
+
+	#
+	# Verify we found everything.
+	#
+	include(FindPackageHandleStandardArgs)
+	find_package_handle_standard_args(BaslerPylon
+	    REQUIRED_VARS
+		BASLERPYLON_GXAPI_LIBRARY BASLERPYLON_BASE_LIBRARY BASLERPYLON_GIGESUPP_LIBRARY
+		BASLERPYLON_UTILITY_LIBRARY BASLERPYLON_UXAPI_LIBRARY GENICAM_API_LIBRARY
+		GENICAM_BASE_LIBRARY GENICAM_LOG_LIBRARY GENICAM_LOG4CPP_LIBRARY
+		BASLERPYLON_INCLUDE_DIR GENICAM_INCLUDE_DIR
+	    VERSION_VAR BASLERPYLON_VERSION_STRING)
+
+	#
+	# Set output variables.
+	#
+	set(BASLERPYLON_INCLUDE_DIRS ${BASLERPYLON_INCLUDE_DIR} ${GENICAM_INCLUDE_DIR})
+	set(BASLERPYLON_LIBRARIES ${BASLERPYLON_GXAPI_LIBRARY} ${BASLERPYLON_BASE_LIBRARY}
+	    ${BASLERPYLON_GIGESUPP_LIBRARY} ${BASLERPYLON_UTILITY_LIBRARY} ${BASLERPYLON_UXAPI_LIBRARY}
+	    ${GENICAM_API_LIBRARY} ${GENICAM_BASE_LIBRARY} ${GENICAM_LOG_LIBRARY}
+	    ${GENICAM_LOG4CPP_LIBRARY})
+
+elseif(BASLERPYLON_VERSION_MAJOR EQUAL 5)
+
+	#
+	# Libraries.
+	#
+	macro(_FIND_BASLERPYLON_LIBRARY _var)
+	    find_library(${_var}
+		NAMES ${ARGN}
+		HINTS
+		    /opt/pylon5/lib64 /opt/pylon5/lib32 /opt/pylon5/lib
+		    $ENV{PYLON_ROOT}/lib64 $ENV{PYLON_ROOT}/lib32 $ENV{PYLON_ROOT}/lib
+	    )
+	    mark_as_advanced(${_var})
+	endmacro()
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_GCBASE_LIBRARY libGCBase_gcc_v3_0_Basler_pylon_v5_0 GCBase_gcc_v3_0_Basler_pylon_v5_0)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_GENAPI_LIBRARY libGenApi_gcc_v3_0_Basler_pylon_v5_0 GenApi_gcc_v3_0_Basler_pylon_v5_0)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_XAPI_LIBRARY libgxapi gxapi)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_LOG4CPP_LIBRARY liblog4cpp_gcc_v3_0_Basler_pylon_v5_0 log4cpp_gcc_v3_0_Basler_pylon_v5_0)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_LOG_LIBRARY libLog_gcc_v3_0_Basler_pylon_v5_0 Log_gcc_v3_0_Basler_pylon_v5_0)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_MATHPARSER_LIBRARY libMathParser_gcc_v3_0_Basler_pylon_v5_0 MathParser_gcc_v3_0_Basler_pylon_v5_0)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_NODEMAPDATA_LIBRARY libNodeMapData_gcc_v3_0_Basler_pylon_v5_0 NodeMapData_gcc_v3_0_Basler_pylon_v5_0)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_PYLONBASE_LIBRARY libpylonbase pylonbase)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_PYLONTLCAMEMU_LIBRARY libpylon_TL_camemu-5.0.1 pylon_TL_camemu-5.0.1 libpylon_TL_camemu.so libpylon_TL_camemu)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_PYLONTLGIGE_LIBRARY libpylon_TL_gige-5.0.1 pylon_TL_gige-5.0.1 libpylon_TL_gige.so libpylon_TL_gige)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_PYLONTLGTC_LIBRARY libpylon_TL_gtc-5.0.1 pylon_TL_gtc-5.0.1 libpylon_TL_gtc.so libpylon_TL_gtc)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_PYLONTLUSB_LIBRARY libpylon_TL_usb-5.0.1 pylon_TL_usb-5.0.1 libpylon_TL_usb.so libpylon_TL_usb)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_PYLONUTILITY_LIBRARY libpylonutility-5.0.1 pylonutility-5.0.1 libpylonutility.so libpylonutility)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_UXAPI_LIBRARY libuxapi uxapi)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_XMLPARSER_LIBRARY libXmlParser_gcc_v3_0_Basler_pylon_v5_0 XmlParser_gcc_v3_0_Basler_pylon_v5_0)
+	_FIND_BASLERPYLON_LIBRARY(BASLERPYLON_LIBUSB_LIBRARY pylon-libusb-1.0 pylon-libusb-1.0.so)
+
+	#
+	# Verify we found everything.
+	#
+	include(FindPackageHandleStandardArgs)
+	find_package_handle_standard_args(BaslerPylon
+	    REQUIRED_VARS
+		BASLERPYLON_GCBASE_LIBRARY BASLERPYLON_GENAPI_LIBRARY BASLERPYLON_XAPI_LIBRARY
+		BASLERPYLON_LOG4CPP_LIBRARY BASLERPYLON_LOG_LIBRARY BASLERPYLON_MATHPARSER_LIBRARY
+		BASLERPYLON_NODEMAPDATA_LIBRARY BASLERPYLON_PYLONBASE_LIBRARY BASLERPYLON_PYLONTLCAMEMU_LIBRARY
+		BASLERPYLON_PYLONTLGIGE_LIBRARY BASLERPYLON_PYLONTLGTC_LIBRARY BASLERPYLON_PYLONTLUSB_LIBRARY
+		BASLERPYLON_PYLONUTILITY_LIBRARY BASLERPYLON_UXAPI_LIBRARY BASLERPYLON_XMLPARSER_LIBRARY
+		BASLERPYLON_LIBUSB_LIBRARY
+		BASLERPYLON_INCLUDE_DIR
+	    VERSION_VAR BASLERPYLON_VERSION_STRING)
+
+	#
+	# Set output variables.
+	#
+	set(BASLERPYLON_INCLUDE_DIRS ${BASLERPYLON_INCLUDE_DIR})
+	set(BASLERPYLON_LIBRARIES ${BASLERPYLON_GCBASE_LIBRARY} ${BASLERPYLON_GENAPI_LIBRARY} ${BASLERPYLON_XAPI_LIBRARY}
+		${BASLERPYLON_LOG4CPP_LIBRARY} ${BASLERPYLON_LOG_LIBRARY} ${BASLERPYLON_MATHPARSER_LIBRARY}
+		${BASLERPYLON_NODEMAPDATA_LIBRARY} ${BASLERPYLON_PYLONBASE_LIBRARY} ${BASLERPYLON_PYLONTLCAMEMU_LIBRARY}
+		${BASLERPYLON_PYLONTLGIGE_LIBRARY} ${BASLERPYLON_PYLONTLGTC_LIBRARY} ${BASLERPYLON_PYLONTLUSB_LIBRARY}
+		${BASLERPYLON_PYLONUTILITY_LIBRARY} ${BASLERPYLON_UXAPI_LIBRARY} ${BASLERPYLON_XMLPARSER_LIBRARY}
+		${BASLERPYLON_LIBUSB_LIBRARY})
+
+else()
+
+	message(SEND_ERROR "Pylon not found or unknown Pylon version found.")
+
+endif()
