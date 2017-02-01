@@ -9,6 +9,6 @@ docker run -it -e DISPLAY=$DISPLAY \
        -v $parent_path:/opt/source \
        -v $PWD/temp/eclipse:/root/.eclipse \
        -v $PWD/temp/workspace:/root/workspace \
-       ros_with_python /bin/sh -c 'cd /opt/source/ros_catkin_ws; /opt/ros/kinetic/env.sh eclipse'
+       ros_with_python /bin/sh -c 'cd /opt/source/ros_catkin_ws; /opt/ros/kinetic/env.sh bash -i -c eclipse'
 
 xhost -
