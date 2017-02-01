@@ -1,11 +1,12 @@
-export parent_path=$(readlink -f ../)
+export parent_path=$(cd "../" 2>/dev/null && pwd -P)
+
 xhost +
 mkdir -p temp/eclipse
 mkdir -p temp/workspace
 docker run -it -e DISPLAY=$DISPLAY \
        -v /tmp/.X11-unix:/tmp/.X11-unix \
        -v $HOME/.Xauthority:/root/.Xauthority \
-       --rm -p 8888:8888 \
+       --rm  \
        -v $parent_path:/opt/source \
        -v $PWD/temp/eclipse:/root/.eclipse \
        -v $PWD/temp/workspace:/root/workspace \
