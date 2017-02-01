@@ -84,4 +84,6 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-ros-core=1.3.0-0* \
     && rm -rf /var/lib/apt/lists/*
 
+# default back to python2
+RUN ln -sf /usr/bin/python2.7 /usr/local/bin/python
 
