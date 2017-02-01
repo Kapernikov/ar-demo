@@ -101,6 +101,19 @@ RUN apt-get update && apt-get install -y openjdk-8-jdk \
     ros-kinetic-ros-core=1.3.0-0* \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y ros-kinetic-camera-info-manager \
+    ros-kinetic-cv-bridge less \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN cd /opt \
+	&& wget 'http://s.baslerweb.com/media/documents/pylon-5.0.5.9000--RC8-x86_64.tar.gz' \
+	&& tar -zxf pylon-5.0.5.9000--RC8-x86_64.tar.gz \
+	&& cd /opt/pylon-5.0.5.9000-x86_64 \
+	&& (yes | bash ./setup-usb.sh) \
+	&& cd /opt \
+	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
+
+
 # default back to python2
 RUN ln -sf /usr/bin/python2.7 /usr/local/bin/python
 
