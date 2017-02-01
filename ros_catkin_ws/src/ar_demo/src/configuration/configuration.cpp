@@ -77,7 +77,7 @@ namespace ar_demo {
 
 	std::pair<bool, std::string> Configuration::getCameraSerialNumber(const std::string & camera_name) const {
 		if(camera_name != "") {
-			return getParameter<std::string>("/camera/" + camera_name + "/hardware/serial", "");
+			return getParameter<std::string>("/camera/" + camera_name + "/hardware/serialnumber", "");
 		}
 		else {
 			return std::make_pair(false, "");

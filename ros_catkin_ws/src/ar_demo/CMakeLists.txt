@@ -156,6 +156,7 @@ add_executable(camera_node
 	src/camera/camera_adapter.cpp
 	src/camera/camera_adapter_basler_pylon_gige.cpp
 	src/camera/camera_adapter_basler_pylon_usb.cpp
+	src/camera/camera_adapter_simulated.cpp
 	src/configuration/configuration.cpp
 )
 target_link_libraries(camera_node
