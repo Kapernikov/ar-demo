@@ -10,6 +10,7 @@
 #include "camera_adapter.hpp"
 #include "camera_adapter_basler_pylon_usb.hpp"
 #include "camera_adapter_basler_pylon_gige.hpp"
+#include "camera_adapter_simulated.hpp"
 // Boost headers.
 #include <boost/date_time/posix_time/posix_time.hpp>
 // OpenCV headers.
@@ -21,32 +22,38 @@
 namespace ar_demo {
 
   Camera::Camera(std::shared_ptr<const Configuration> configuration, ros::NodeHandle node_handle,
-			const std::string & camera_name):
+			const std::string & camera_name, const std::string & replay_video):
 		configuration_{configuration},
 		node_handle_{node_handle},
     camera_name_{camera_name},
     image_transport_{node_handle_},
 		camera_driver_{nullptr},
     camera_is_initialised_{false},
-    camera_is_streaming_{false}
+    camera_is_streaming_{false},
+		replay_video_{replay_video}
   {
 		// Select camera driver.
-		auto camera_driver_name = configuration_->getCameraDriver(camera_name);
-		if(camera_driver_name.second == "BaslerPylonGige" || camera_driver_name.second == "BaslerPylonGigE") {
-			camera_driver_ = new ar_demo::BaslerPylonGigECameraAdapter(configuration);
-		}
-		else if(camera_driver_name.second == "BaslerPylonUsb") {
-			camera_driver_ = new ar_demo::BaslerPylonUsbCameraAdapter(configuration);
+		if(replay_video != "") {
+			camera_driver_ = new ar_demo::SimulatedCameraAdapter(configuration, replay_video_);
 		}
 		else {
-			if(!camera_driver_name.first) {
-				ROS_FATAL("No driver specified for camera '%s'.", camera_name.c_str());
-				throw std::runtime_error("No camera driver specified");
+			auto camera_driver_name = configuration_->getCameraDriver(camera_name);
+			if(camera_driver_name.second == "BaslerPylonGige" || camera_driver_name.second == "BaslerPylonGigE") {
+				camera_driver_ = new ar_demo::BaslerPylonGigECameraAdapter(configuration);
+			}
+			else if(camera_driver_name.second == "BaslerPylonUsb") {
+				camera_driver_ = new ar_demo::BaslerPylonUsbCameraAdapter(configuration);
 			}
 			else {
-				ROS_FATAL("Camera driver '%s' specified for camera '%s' is not supported.", camera_driver_name.second.c_str(),
-						camera_name.c_str());
-				throw std::runtime_error("Unsupported camera driver specified");
+				if(!camera_driver_name.first) {
+					ROS_FATAL("No driver specified for camera '%s'.", camera_name.c_str());
+					throw std::runtime_error("No camera driver specified");
+				}
+				else {
+					ROS_FATAL("Camera driver '%s' specified for camera '%s' is not supported.", camera_driver_name.second.c_str(),
+							camera_name.c_str());
+					throw std::runtime_error("Unsupported camera driver specified");
+				}
 			}
 		}
     // Get hardware information from parameter server.

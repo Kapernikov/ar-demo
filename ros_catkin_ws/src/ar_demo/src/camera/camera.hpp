@@ -70,10 +70,12 @@ namespace ar_demo {
       sensor_msgs::CameraInfo cached_image_camera_info_;
       ImageInfo cached_image_info_;
 
+			std::string replay_video_;
+
     public:
 
       Camera(std::shared_ptr<const Configuration> configuration, ros::NodeHandle node_handle,
-          const std::string & camera_name);
+          const std::string & camera_name, const std::string & replay_movie);
       ~Camera();
       bool isInitialised();
       bool getSettingsAndConfigureCamera();

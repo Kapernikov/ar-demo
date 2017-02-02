@@ -33,6 +33,7 @@ int main(int argc, char ** argv) {
 	description.add_options()
 		("help", "display this help and exit")
 		("camera", program_options::value<std::string>(), "input camera name (required)")
+		("replay", program_options::value<std::string>(), "replay video instead of real-time capturing (optional)")
 		("list-cameras", "list configured cameras");
 	program_options::variables_map variables;
 	program_options::store(program_options::parse_command_line(argc, argv, description), variables);
@@ -60,9 +61,14 @@ int main(int argc, char ** argv) {
 		ROS_FATAL("No input camera specified. Use the --camera option to specify one.");
 		return EXIT_FAILURE;
 	}
+	std::string replay_video{""};
+	if(variables.count("replay")) {
+		replay_video = variables["replay"].as<std::string>();
+		ROS_INFO("Using camera node in replay (simulation) mode.");
+	}
 
   // Initialise camera.
-  ar_demo::Camera camera(configuration, ros::NodeHandle("/camera/" + camera_name), camera_name);
+  ar_demo::Camera camera(configuration, ros::NodeHandle("/camera/" + camera_name), camera_name, replay_video);
   if(!camera.isInitialised()) {
     ROS_FATAL("An error occured while initialising camera '%s'.", camera_name.c_str());
     return EXIT_FAILURE;
