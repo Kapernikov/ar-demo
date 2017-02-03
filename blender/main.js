@@ -52,9 +52,28 @@ function render() {
     //requestAnimationFrame(render);
     //rotateCube();
     //renderer.render(scene, camera);
-    renderer.render(scene,scene.getChildByName("Camera"));
+    renderer.render(scene,scene.getObjectByName("Camera"));
 
 }
+
+function start_socket() {
+    var socket = io.connect('http://' + document.domain + ':' + location.port + '/');
+    
+    socket.on('posupdate', function(msg) {
+        var x = msg.x;
+        var y = msg.y;
+        console.log("update got " + x + " and " + y);
+        scene.getObjectByName("VW Coccinelle").position.x = x;
+        scene.getObjectByName("VW Coccinelle").position.y = y;
+        render();
+    });
+    //alert('http://' + document.domain + ':' + location.port + '/pos');
+
+}
+
+$(document).ready(function(){
+    start_socket();
+})
 
 init();
 render();
