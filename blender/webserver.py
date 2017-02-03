@@ -35,13 +35,12 @@ state = {
 
 def inc_pos():
     (x,y) = state['pos']
-    x += 0.1
-    y += 0.1
+    x += 0.01
+    y += 0.01
     
     state['pos'] = (x,y)
 
 def bg_emit():
-    print("emit posupdate")
     inc_pos()
     (x,y) = state['pos']
     socketio.emit('posupdate', dict(x=x,y=y))
@@ -50,7 +49,7 @@ def bg_emit():
 def listen():
     while True:
         bg_emit()
-        eventlet.sleep(3)
+        eventlet.sleep(0.07)
 
 
 eventlet.spawn(listen)
