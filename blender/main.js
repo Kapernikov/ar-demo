@@ -1,4 +1,4 @@
-var scene, camera, renderer;
+var scene, camera, renderer, controls;
 
 var WIDTH  = window.innerWidth;
 var HEIGHT = window.innerHeight;
@@ -13,6 +13,8 @@ function init() {
     initRenderer();
 
     document.body.appendChild(renderer.domElement);
+    
+
 }
 
 function initCamera() {
@@ -34,6 +36,25 @@ function initCube() {
         //scene.add(mesh);
         scene = result;
         //alert(scene);
+
+        controls = new THREE.TrackballControls(scene.getObjectByName("Camera"));
+        //controls.target.set( 0, 0, 0 )
+
+				controls.rotateSpeed = 1.0;
+				controls.zoomSpeed = 1.2;
+				controls.panSpeed = 0.8;
+
+				controls.noZoom = false;
+				controls.noPan = false;
+
+				controls.staticMoving = true;
+				controls.dynamicDampingFactor = 0.3;
+
+				controls.keys = [ 65, 83, 68 ];
+
+				controls.addEventListener( 'change', render );
+
+        animate();
         render();
         //alert("boo");
     });
@@ -62,7 +83,7 @@ function start_socket() {
     socket.on('posupdate', function(msg) {
         var x = msg.x;
         var y = msg.y;
-        console.log("update got " + x + " and " + y);
+        //console.log("update got " + x + " and " + y);
         scene.getObjectByName("VW Coccinelle").position.x = x;
         scene.getObjectByName("VW Coccinelle").position.y = y;
         render();
@@ -71,10 +92,17 @@ function start_socket() {
 
 }
 
+
+
+function animate() {
+        requestAnimationFrame( animate );
+        controls.update();
+}
+
 $(document).ready(function(){
     start_socket();
 })
 
 init();
-render();
+//render();
 
