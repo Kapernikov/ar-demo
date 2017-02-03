@@ -1,0 +1,21 @@
+# Theoretical camera calibration file hand-written from the camera and lens specifications.
+image_width: 1920
+image_height: 1200
+camera_name: aca1920_150uc_21917526
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [1667, 0, 960, 0, 1667, 600, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0, 0, 0, 0, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [1667, 0, 960, 0, 0, 1667, 600, 0, 0, 0, 1, 0]
