@@ -32,3 +32,6 @@ RUN cd /opt \
 	&& (yes | bash ./setup-usb.sh) \
 	&& cd /opt \
 	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
+
+
+RUN ln -sf /usr/bin/python /usr/local/bin/python
