@@ -1,1 +1,1 @@
-docker build -t ros_with_python ros_with_python
+docker build -t ros_with_python ros_standard
