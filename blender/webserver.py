@@ -2,9 +2,9 @@
 
 from flask import Flask, send_from_directory, render_template, send_file,g,session
 from flask_socketio import SocketIO, emit
-import zmq.green as zmq
+import eventlet.green.zmq as zmq
 import eventlet
-
+import json
 app = Flask(__name__)
 app.secret_key = "boo"
 socketio = SocketIO(app)
@@ -37,7 +37,6 @@ def inc_pos():
     (x,y) = state['pos']
     x += 0.01
     y += 0.01
-    
     state['pos'] = (x,y)
 
 def bg_emit():
@@ -47,9 +46,19 @@ def bg_emit():
 
 
 def listen():
+    context = zmq.Context()
+    socket = context.socket(zmq.SUB)
+    #socket.setsockopt(zmq.SUBSCRIBE,"1")
+    socket.setsockopt_string(zmq.SUBSCRIBE,'')
+
+    socket.connect ("tcp://localhost:%i" % 5556)
     while True:
-        bg_emit()
-        eventlet.sleep(0.07)
+        string = socket.recv().decode('utf-8')
+        print(string)
+        (x,y) = json.loads(string)
+        socketio.emit('posupdate', dict(x=x,y=y))
+        #bg_emit()
+        #eventlet.sleep(0.07)
 
 
 eventlet.spawn(listen)
