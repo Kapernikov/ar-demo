@@ -31,4 +31,4 @@ while True:
     s = json.dumps(p)
     print(s)
     socket.send_string(s)
-    time.sleep(1)
+    time.sleep(0.1)
