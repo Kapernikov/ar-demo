@@ -89,8 +89,6 @@ RUN cd /opt \
 	&& rm eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
 	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
 
-RUN apt-get install xserver-xephyr mesa-utils
-
 # bootstrap rosdep
 RUN rosdep init \
     && rosdep update
