@@ -35,3 +35,4 @@ RUN cd /opt \
 
 
 RUN ln -sf /usr/bin/python /usr/local/bin/python
+ADD bashrc_ros /etc/bashrc_ros

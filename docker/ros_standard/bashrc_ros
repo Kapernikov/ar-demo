@@ -1,0 +1,7 @@
+#!/bin/bash
+source $HOME/.bashrc
+
+cd /opt/source/ros_catkin_ws
+. devel/setup.bash
+
+echo setup.bash read
