@@ -7,6 +7,16 @@ import eventlet
 import json
 from functools import wraps, update_wrapper
 from datetime import datetime
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option("-n", "--host", dest="zmqhost",
+                  help="connect to HOST for the zeroMQ queue", metavar="HOST", default="localhost")
+parser.add_option("-p", "--port", dest="zmqport",
+                  help="connect to zeromq port PORT", metavar="PORT", default="5556")
+
+(options, args) = parser.parse_args()
+
 
 app = Flask(__name__)
 app.secret_key = "boo"
@@ -64,8 +74,9 @@ def listen():
     socket = context.socket(zmq.SUB)
     #socket.setsockopt(zmq.SUBSCRIBE,"1")
     socket.setsockopt_string(zmq.SUBSCRIBE,'')
-
-    socket.connect ("tcp://localhost:%i" % 5556)
+    zmq_url = "tcp://%s:%s" % (options.zmqhost, options.zmqport)
+    print("ZMQ: subscribe to %s" % zmq_url)
+    socket.connect (zmq_url)
     while True:
         string = socket.recv().decode('utf-8')
         print(string)
