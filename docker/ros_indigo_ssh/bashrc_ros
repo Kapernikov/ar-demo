@@ -5,3 +5,13 @@ cd /opt/source/ros_catkin_ws
 . devel/setup.bash
 
 echo setup.bash read
+
+unset LC_ADDRESS
+unset LC_IDENTIFICATION
+unset LC_MEASUREMENT
+unset LC_MONETARY
+unset LC_NAME
+unset LC_NUMERIC
+unset LC_PAPER
+unset LC_TELEPHONE
+unset LC_TIME
