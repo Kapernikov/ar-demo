@@ -30,19 +30,19 @@ def stop_pushing():
 
 
 state = {
-    'pos': (-1,2)
+    'pos': (0,0,0)
 }
 
-def inc_pos():
-    (x,y) = state['pos']
-    x += 0.01
-    y += 0.01
-    state['pos'] = (x,y)
+# def inc_pos():
+#     (x,y,z) = state['pos']
+#     x += 0.01
+#     y += 0.01
+#     state['pos'] = (x,y)
 
-def bg_emit():
-    inc_pos()
-    (x,y) = state['pos']
-    socketio.emit('posupdate', dict(x=x,y=y))
+# def bg_emit():
+#     inc_pos()
+#     (x,y,z) = state['pos']
+#     socketio.emit('posupdate', dict(x=x,y=y,z=z))
 
 
 def listen():
@@ -55,8 +55,8 @@ def listen():
     while True:
         string = socket.recv().decode('utf-8')
         print(string)
-        (x,y) = json.loads(string)
-        socketio.emit('posupdate', dict(x=x,y=y))
+        (x,y,z) = json.loads(string)
+        socketio.emit('posupdate', dict(x=x,y=y,z=z))
         #bg_emit()
         #eventlet.sleep(0.07)
 
