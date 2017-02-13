@@ -82,8 +82,8 @@ def listen():
     while True:
         string = socket.recv().decode('utf-8')
         print(string)
-        (x,y,z,rx,ry,rz) = json.loads(string)
-        socketio.emit('posupdate', dict(x=x,y=y,z=z,rx=rx,ry=ry,rz=rz))
+        inp = json.loads(string)
+        socketio.emit('posupdate', inp)
 
 
 eventlet.spawn(listen)

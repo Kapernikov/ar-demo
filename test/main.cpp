@@ -29,12 +29,12 @@ int main () {
 	float x = 0.0;
     	float y = 0.0 - i;
 	float z = 2.2;
-	float rx = 0.0;
+	float rx = -1.57;
     	float ry = 0.0;
-	float rz = 0.0;
+	float rz = 3.14;
 
 	ostringstream msgJson;
-	msgJson << "{x: " << x << ", y: " << y << ", z: " << z << "}" << endl;
+	msgJson << "{\"x\": " << x << ", \"y\": " << y << ", \"z\": " << z << ", \"rx\": " << rx << ", \"ry\": " << ry << ", \"rz\": " << rz << "}" << endl;
 	cout << msgJson.str() << endl;
 
         //  Send message to all subscribers
