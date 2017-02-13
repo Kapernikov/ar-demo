@@ -44,7 +44,7 @@ def stop_pushing():
 
 
 state = {
-    'pos': (0,0,0)
+    'pos': (0,0,0,0,0,0)
 }
 
 # def inc_pos():
@@ -69,8 +69,8 @@ def listen():
     while True:
         string = socket.recv().decode('utf-8')
         print(string)
-        (x,y,z) = json.loads(string)
-        socketio.emit('posupdate', dict(x=x,y=y,z=z))
+        (x,y,z,rx,ry,rz) = json.loads(string)
+        socketio.emit('posupdate', dict(x=x,y=y,z=z,rx=rx,ry=ry,rz=rz))
 
 
 eventlet.spawn(listen)
