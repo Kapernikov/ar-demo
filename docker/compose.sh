@@ -1,4 +1,5 @@
 export parent_path=$(cd "../" 2>/dev/null && pwd -P)
+export COMPOSE_API_VERSION=auto
 
 xhost +
 
