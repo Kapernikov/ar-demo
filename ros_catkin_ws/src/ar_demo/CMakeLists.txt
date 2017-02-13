@@ -50,6 +50,11 @@ include_directories(${BASLERPYLON_INCLUDE_DIRS})
 find_package(aruco REQUIRED)
 include_directories(${aruco_INCLUDE_DIRS})
 
+## ZeroMQ
+find_package(ZMQ REQUIRED)
+include_directories(${ZEROMQ_INCLUDE_DIRS})
+
+
 ################################################
 ## Declare ROS messages, services and actions ##
 ################################################
@@ -206,6 +211,7 @@ target_link_libraries(aruco_relative_node
 	${Boost_LIBRARIES}
 	${OpenCV_LIBS}
 	${aruco_LIBS}
+	${ZMQ_LIBRARIES}
 )
 add_dependencies(aruco_relative_node
 	ar_demo_gencpp
