@@ -1,0 +1,34 @@
+version: "2"
+services:
+    roscore:
+        build: ros_standard
+        ports:
+            - "5555:5555"
+        volumes:
+            - ${sourcedir}:/opt/source
+
+    webserver:
+        build: python_webserver
+        ports:
+            - "5000:5000"
+        volumes:
+            - ${webdir}:/opt/source
+        command: python webserver.py --host=roscore --port=5556 --webport=5000
+        links:
+            - roscore
+            
+    interactive_shell:
+        build: ros_standard
+        stdin_open: true
+        tty: true
+        links:
+            - roscore
+            - webserver
+        environment:
+            - DISPLAY=${DISPLAY}
+        volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - ${HOME}/.Xauthority:/root/.Xauthority
+            - ${sourcedir}:/opt/source
+            
+
