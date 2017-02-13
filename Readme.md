@@ -3,9 +3,11 @@ Blender file exporteren met de export tool bij three.js (.../utils/exporter/blen
 
 
 ## Kever
-De nulpositie van de kever is x=1.52418, y=1.37277 z=2.2
-De Y as wijst richting koffer. Z as door 't dak.
-
+De nulpositie van de kever is x=0, y=0 z=2.2
+* X = Door linker deur
+* Y as wijst richting koffer
+* Z as door 't dak
+Voor Three.js zijn de y en z assen omgewisseld.
 
 
 # Op Mac
@@ -19,10 +21,13 @@ Dit script start de container met -rm. Hierdoor zal de container niet blijven st
 
 ## In docker container
 (Xephyr -ac -screen 1280x1024 -br -reset -terminate 2> /dev/null :1 &)
+
 (Xephyr -ac -screen 1280x1024 :1 &)
+
 Xephyr -ac -screen 1280x1024 -br -reset -terminate :2 &
 
 Start een nieuwe terminal in de container (Aangezien de & de terminal precies niet terug geeft)
+
 docker exec -it ros_standard_container bash -c "cd /opt/source/ros_catkin_ws; . devel/setup.bash; exec /bin/bash"
 
 DISPLAY=:1 roslaunch ar_demo ar_demo.launch
