@@ -4,9 +4,13 @@ services:
         build: ros_indigo
         ports:
             - "5555:5555"
+        environment:
+            - DISPLAY=${DISPLAY}
         volumes:
             - ${sourcedir}:/opt/source
-        command: /bin/bash -c '/opt/ros/indigo/env.sh bash --rcfile /etc/bashrc_ros -c \\"roscore -p 11311\\"'
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - ${HOME}/.Xauthority:/root/.Xauthority
+        command: /bin/bash -c '/opt/ros/indigo/env.sh bash --rcfile /etc/bashrc_ros -c \\"source /etc/bashrc_ros;env;roslaunch ar_demo ar_demo.launch\\"'
 
 
     webserver:
@@ -30,6 +34,7 @@ services:
             - webserver
         environment:
             - DISPLAY=${DISPLAY}
+            - ROS_MASTER_URI=http://roscore:11311/
         command: /bin/bash -c '/opt/ros/indigo/env.sh bash --rcfile /etc/bashrc_ros'
         depends_on:
             - webserver
