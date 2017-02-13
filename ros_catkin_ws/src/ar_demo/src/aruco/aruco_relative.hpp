@@ -19,6 +19,8 @@
 // ROS headers.
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
+// 0MQ headers.
+#include <zmq.hpp>
 
 
 namespace ar_demo {
@@ -40,6 +42,8 @@ namespace ar_demo {
 			std::string moving_board_name_;
 			ArucoFacade aruco_facade_;
 
+			zmq::context_t zmq_context_;
+			zmq::socket_t zmq_publisher_;
 		public:
 
 			ArUcoRelative(std::shared_ptr<const Configuration> configuration, ros::NodeHandle node_handle,

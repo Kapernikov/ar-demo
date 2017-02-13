@@ -33,7 +33,9 @@ namespace ar_demo {
 		aruco_facade_{configuration, node_handle},
 		camera_name_{camera_name},
 		reference_board_name_{reference_board_name},
-		moving_board_name_{moving_board_name} {
+		moving_board_name_{moving_board_name},
+		zmq_context_{1},
+		zmq_publisher_{zmq_context_, ZMQ_PUB} {
 		// Get camera parameters from camera.
 		ros::service::waitForService("/camera/" + camera_name_ + "/get_camera_info");
 		GetCameraInfo camera_info_srv;
@@ -48,6 +50,8 @@ namespace ar_demo {
 		// Initialise ArUco facade.
 		std::vector<std::string> boards{reference_board_name, moving_board_name};
 		aruco_facade_.initialise(camera_name_, boards);
+		// Initialise 0MQ publisher.
+		zmq_publisher_.bind("tcp://*:5556");
 		// Initialisation done.
 		is_initialised_ = true;
 	}
@@ -128,7 +132,7 @@ namespace ar_demo {
 					// single multiplication.
 					ublas::matrix<double> transformation_matrix = ublas::prod(transform_camera_reference, transform_moving_camera);
 
-					// TODO: calculate the parameters we need from the transformation matrix.
+					// Calculate translation and rotation parameters.
 					double tx = transformation_matrix(0, 3) / transformation_matrix(3, 3);
 					double ty = transformation_matrix(1, 3) / transformation_matrix(3, 3);
 					double tz = transformation_matrix(2, 3) / transformation_matrix(3, 3);
@@ -145,7 +149,13 @@ namespace ar_demo {
 						ry = atan2(-transformation_matrix(2,0), sy);
 						rz = 0;
 					}
-					// TODO: send our message using ROS or 0MQ or ...
+					// Send message using 0MQ.
+					std::ostringstream msgJson;
+					msgJson << "{\"x\": " << tx << ", \"y\": " << ty << ", \"z\": " << tz << ", "
+						<< "\"rx\": " << rx << ", \"ry\": " << ry << ", \"rz\": " << rz << "}" << std::endl;
+					zmq::message_t message(msgJson.str().size());
+					memcpy(message.data (), (msgJson.str().c_str()), (msgJson.str().size()));
+					zmq_publisher_.send(message);
 				}
 				else {
 					ROS_WARN("ArUcoRelative did not find all boards found; cannot calculate relative positions.");
