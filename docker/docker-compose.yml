@@ -1,7 +1,7 @@
 version: "2"
 services:
     roscore:
-        build: ros_standard
+        build: ros_indigo
         ports:
             - "5555:5555"
         volumes:
@@ -19,7 +19,7 @@ services:
             - roscore
             
     interactive_shell:
-        build: ros_standard
+        build: ros_indigo
         stdin_open: true
         tty: true
         links:
