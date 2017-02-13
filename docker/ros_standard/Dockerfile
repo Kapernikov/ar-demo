@@ -35,9 +35,19 @@ RUN cd /opt \
 	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
 
 RUN apt-get update && apt-get install -y \
-    libzmq3-dev libzmqpp3 libczmq-dev libzmqpp-dev \
+    libzmq3-dev libzmqpp3 libczmq-dev libzmqpp-dev libopencv-dev \
+    libicu-dev freeglut3 freeglut3-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libxine2-dev \
     && rm -rf /var/lib/apt/lists/*
 
+
+RUN cd /opt \
+	&& wget http://sourceforge.net/projects/aruco/files/1.3.0/aruco-1.3.0.tgz \
+	&& tar zxvf aruco-1.3.0.tgz \
+	&& cd aruco-1.3.0 \
+	&& mkdir build && cd build \
+	&& OpenCV_DIR=/usr/share/OpenCV/ cmake .. \
+	&& make -j2 && make install \
+	&& rm -rf /opt/aruco*
 
 RUN ln -sf /usr/bin/python /usr/local/bin/python
 ADD bashrc_ros /etc/bashrc_ros
