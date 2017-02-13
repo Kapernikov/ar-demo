@@ -117,20 +117,19 @@ namespace ar_demo {
 					}
 				}
 				if(transform_reference_camera_valid && transform_moving_camera_valid) {
-					ublas::vector<double> reference { 4 };
-					reference <<= 0.0, 0.0, 0.0, 1.0;
-					ublas::vector<double> reference_camera = ublas::prod(transform_moving_camera, reference);
-					ublas::vector<double> reference_reference = ublas::prod(transform_camera_reference, reference_camera);
-					geometry_msgs::Point moving_location;
-					moving_location.x = reference_reference(0) / reference_reference(3);
-					moving_location.y = reference_reference(1) / reference_reference(3);
-					moving_location.z = reference_reference(2) / reference_reference(3);
-					ROS_INFO("Position of %s marker in %s CS: (%.3f, %.3f, %.3f)",
-							moving_board_name_.c_str(), reference_board_name_.c_str(),
-							reference_reference(0) / reference_reference(3),
-							reference_reference(1) / reference_reference(3),
-							reference_reference(2) / reference_reference(3));
-					// TODO: send message!
+					// This is the homogeneous 'moving board' -> (camera) -> 'reference board' transformation matrix:
+					// | R11 R12 R13  T1 |
+					// | R21 R22 R23  T2 |
+					// | R31 R32 R33  T3 |
+					// |   0   0   0   1 |
+					// where R11...R13, R21...R23, R31...R33 is the rotation matrix and T1...T3 is the translation matrix.
+					//
+					// Multiply with a vector in homogeneous coordinates (X, Y, Z, 1) to perform rotation and translation in a
+					// single multiplication.
+					ublas::matrix<double> transformation_matrix = ublas::prod(transform_camera_reference, transform_moving_camera);
+
+					// TODO: calculate the parameters we need from the transformation matrix.
+					// TODO: send our message using ROS or 0MQ or ...
 				}
 				else {
 					ROS_WARN("ArUcoRelative did not find all boards found; cannot calculate relative positions.");
