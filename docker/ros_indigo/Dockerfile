@@ -17,11 +17,14 @@ RUN cd /opt \
 	&& tar -zxf eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
 	&& rm eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
 	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
-kd
 
 
+RUN echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
 
-RUN apt-get update && apt-get install -y openjdk-8-jdk \
+
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository ppa:webupd8team/java -y  && apt-get update \
+    && apt-get install -y oracle-java8-installer oracle-java8-set-default \
     ros-indigo-camera-info-manager ros-indigo-cv-bridge less vim joe libavcodec-extra \
     && rm -rf /var/lib/apt/lists/*
 
@@ -29,13 +32,13 @@ RUN cd /opt \
 	&& wget 'http://s.baslerweb.com/media/documents/pylon-5.0.5.9000--RC8-x86_64.tar.gz' \
 	&& tar -zxf pylon-5.0.5.9000--RC8-x86_64.tar.gz \
 	&& cd /opt/pylon-5.0.5.9000-x86_64 \
-	&& mkdir /etc/udev/rules.d \
+	&& mkdir -p /etc/udev/rules.d \
 	&& (yes | bash ./setup-usb.sh) \
 	&& cd /opt \
 	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
 
 RUN apt-get update && apt-get install -y \
-    libzmq3-dev libzmqpp3 libczmq-dev libzmqpp-dev libopencv-dev \
+    libzmq3-dev libzmqpp3 libzmqpp-dev libopencv-dev \
     libicu-dev freeglut3 freeglut3-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev libxine2-dev \
     && rm -rf /var/lib/apt/lists/*
 
