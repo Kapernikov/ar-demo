@@ -34,6 +34,10 @@ RUN cd /opt \
 	&& cd /opt \
 	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
 
+RUN apt-get update && apt-get install -y \
+    libzmq3-dev libzmqpp3 libczmq-dev libzmqpp-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 
 RUN ln -sf /usr/bin/python /usr/local/bin/python
 ADD bashrc_ros /etc/bashrc_ros
