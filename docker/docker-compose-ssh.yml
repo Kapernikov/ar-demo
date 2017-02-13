@@ -1,0 +1,26 @@
+version: "2"
+services:
+    roscore:
+        build: ros_indigo_ssh
+        privileged: true
+        ports:
+            - "5555:5555"
+            - "22"
+        volumes:
+            - ${sourcedir}:/opt/source
+        command: /usr/sbin/sshd -D -e
+
+
+    webserver:
+        build: python_webserver
+        ports:
+            - "5000:5000"
+        volumes:
+            - ${webdir}:/opt/source
+        command: python webserver.py --host=roscore --port=5556 --webport=5000
+        depends_on:
+            - roscore
+        links:
+            - roscore
+            
+
