@@ -1,4 +1,4 @@
-var scene, camera, renderer, controls;
+var scene, camera, renderer, controls, startrotation, startposition;
 
 var WIDTH  = window.innerWidth;
 var HEIGHT = window.innerHeight;
@@ -54,6 +54,9 @@ function initScene() {
 
 				controls.addEventListener( 'change', render );
 
+
+        startrotation = scene.getObjectByName("VW Coccinelle").rotation.clone();
+        startposition = scene.getObjectByName("VW Coccinelle").position.clone();
         animate();
         render();
         //alert("boo");
@@ -88,12 +91,12 @@ function start_socket() {
         var ry = msg.ry;
         var rz = msg.rz;
         console.log("update got x:" + x + " and y:" + y + " and z: " + z + " rx:" + rx + " and ry:" + ry + " and rz: " + rz);
-        scene.getObjectByName("VW Coccinelle").position.x = x;
-        scene.getObjectByName("VW Coccinelle").position.y = z;
-        scene.getObjectByName("VW Coccinelle").position.z = y;
-        scene.getObjectByName("VW Coccinelle").rotation.x = rx;
-        scene.getObjectByName("VW Coccinelle").rotation.y = ry;
-        scene.getObjectByName("VW Coccinelle").rotation.z = rz;
+        scene.getObjectByName("VW Coccinelle").position.x = x * 500.0;
+        //scene.getObjectByName("VW Coccinelle").position.y = (z + 0.001) * 1000.0;
+        scene.getObjectByName("VW Coccinelle").position.z = y * 500.0;
+        scene.getObjectByName("VW Coccinelle").rotation.x = startrotation.x + rx; // z z x 0 --> x is van links naar rechts
+        scene.getObjectByName("VW Coccinelle").rotation.y = startrotation.z + rz; // x y y 0 --> y is van boven naar onder
+        scene.getObjectByName("VW Coccinelle").rotation.z = startrotation.y + ry; // y x z z --> z is van dicht naar ver
         render();
     });
     //alert('http://' + document.domain + ':' + location.port + '/pos');
