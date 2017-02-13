@@ -7,12 +7,12 @@
 
 ####################################################################################################
 #
-# Camera definitions, independent of the AGV or their position on the AGV:
+# Camera definitions.
 #   - Hardware, to select driver and connect to camera
 #   - Exposure settings.
 #
 
-camera_info_url: package://ar_demo/calibrations/camera_${NAME}.yaml
+camera_info_url: package://ar_demo/calibration/camera_${NAME}.yaml
 
 camera:
     aca1920_40uc_21781603:
@@ -106,7 +106,7 @@ camera:
                 x: 1
                 y: 1
             # Framerate.
-            fps: 10.0
+            fps: 5.0
             # Auto exposure settings
             auto:
                 enable: true
@@ -168,3 +168,21 @@ camera:
                 gain_db_max: 12.0
                 illuminance_lux_min: 500.0
 
+
+####################################################################################################
+#
+# ArUco settings.
+#   - Board location.
+#   - Board definitions.
+#
+
+aruco:
+  # Extension should be .yml (Aruco complains if the extension is .yaml).
+  board_info_url: package://ar_demo/aruco_boards/${TYPE}_${BOARD}.yml
+
+  reference:
+      board_name: 'reference'
+      marker_size_m: 0.028
+  johndeere:
+      board_name: 'johndeere'
+      marker_size_m: 0.028
