@@ -14,6 +14,8 @@ parser.add_option("-n", "--host", dest="zmqhost",
                   help="connect to HOST for the zeroMQ queue", metavar="HOST", default="localhost")
 parser.add_option("-p", "--port", dest="zmqport",
                   help="connect to zeromq port PORT", metavar="PORT", default="5556")
+parser.add_option("-P", "--webport", dest="webport",
+                  help="webserver listens on PORT", metavar="PORT", default="5000")
 
 (options, args) = parser.parse_args()
 
@@ -94,5 +96,5 @@ def send_static(path):
 
 
 if __name__ == "__main__":
-    socketio.run(app,host='0.0.0.0',port=5000)
+    socketio.run(app,host='0.0.0.0',port=int(options.webport))
 
