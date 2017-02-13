@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python-zmq wget curl \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get --yes install xserver-xephyr mesa-utils
 
 ### install eclipse neon
 RUN cd /opt \

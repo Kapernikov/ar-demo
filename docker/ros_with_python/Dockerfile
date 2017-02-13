@@ -89,8 +89,6 @@ RUN cd /opt \
 	&& rm eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
 	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
 
-
-
 # bootstrap rosdep
 RUN rosdep init \
     && rosdep update
@@ -112,7 +110,6 @@ RUN cd /opt \
 	&& (yes | bash ./setup-usb.sh) \
 	&& cd /opt \
 	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
-
 
 # default back to python2
 RUN ln -sf /usr/bin/python2.7 /usr/local/bin/python
