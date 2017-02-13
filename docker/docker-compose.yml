@@ -6,6 +6,7 @@ services:
             - "5555:5555"
         volumes:
             - ${sourcedir}:/opt/source
+        command: /bin/bash -c '/opt/ros/indigo/env.sh bash --rcfile /etc/bashrc_ros -c \\"roscore -p 11311\\"'
 
 
     webserver:
@@ -15,6 +16,8 @@ services:
         volumes:
             - ${webdir}:/opt/source
         command: python webserver.py --host=roscore --port=5556 --webport=5000
+        depends_on:
+            - roscore
         links:
             - roscore
             
