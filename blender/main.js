@@ -8,7 +8,7 @@ var SPEED = 0.01;
 function init() {
     scene = new THREE.Scene();
 
-    initCube();
+    initScene();
     initCamera();
     initRenderer();
 
@@ -28,7 +28,7 @@ function initRenderer() {
     renderer.setSize(WIDTH, HEIGHT);
 }
 
-function initCube() {
+function initScene() {
     //var loader = new THREE.SceneLoader();
     var loader = new THREE.ObjectLoader();
     loader.load('./scene.json', function(result) {
@@ -83,9 +83,11 @@ function start_socket() {
     socket.on('posupdate', function(msg) {
         var x = msg.x;
         var y = msg.y;
+        var z = msg.z;
         //console.log("update got " + x + " and " + y);
         scene.getObjectByName("VW Coccinelle").position.x = x;
         scene.getObjectByName("VW Coccinelle").position.y = y;
+        scene.getObjectByName("VW Coccinelle").position.z = z;
         render();
     });
     //alert('http://' + document.domain + ':' + location.port + '/pos');

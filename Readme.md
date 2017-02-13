@@ -1,3 +1,13 @@
+# Blender scene tonen op een webpagina
+Blender file exporteren met de export tool bij three.js (.../utils/exporter/blender) levert een json file van die scene.
+
+
+## Kever
+De nulpositie van de kever is x=1.52418, y=1.37277 z=2.2
+De Y as wijst richting koffer. Z as door 't dak.
+
+
+
 # Op Mac
 ## Build image
 cd docker
