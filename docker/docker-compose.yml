@@ -27,7 +27,7 @@ services:
             - webserver
         environment:
             - DISPLAY=${DISPLAY}
-        command: /bin/bash
+        command: /bin/bash -c '/opt/ros/kinetic/env.sh bash --rcfile /etc/bashrc_ros'
         depends_on:
             - webserver
             - roscore
