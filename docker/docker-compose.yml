@@ -2,6 +2,7 @@ version: "2"
 services:
     roscore:
         build: ros_indigo
+        privileged: true
         ports:
             - "5555:5555"
         environment:
