@@ -46,6 +46,9 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 find_package(BaslerPylon 5.0.0 REQUIRED)
 include_directories(${BASLERPYLON_INCLUDE_DIRS})
 
+## ArUco
+find_package(aruco REQUIRED)
+include_directories(${aruco_INCLUDE_DIRS})
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -76,6 +79,9 @@ add_message_files(
        	FILES
 	ControlCamera.msg
 	ImageInfo.msg
+	ArucoResults.msg
+	DetectedFrame.msg
+	DetectedBoard.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -185,6 +191,26 @@ target_link_libraries(camera_display_node
 add_dependencies(camera_display_node
 	ar_demo_gencpp
 )
+
+#
+## ArUco relative locator node ##
+#
+add_executable(aruco_relative_node
+	src/aruco/aruco_relative_node.cpp
+	src/aruco/aruco_relative.cpp
+	src/aruco/aruco_facade.cpp
+	src/configuration/configuration.cpp
+)
+target_link_libraries(aruco_relative_node
+	${catkin_LIBRARIES}
+	${Boost_LIBRARIES}
+	${OpenCV_LIBS}
+	${aruco_LIBS}
+)
+add_dependencies(aruco_relative_node
+	ar_demo_gencpp
+)
+
 
 ## Declare a C++ library
 # add_library(ar_demo
