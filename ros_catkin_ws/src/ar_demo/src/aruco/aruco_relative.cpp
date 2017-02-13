@@ -129,6 +129,22 @@ namespace ar_demo {
 					ublas::matrix<double> transformation_matrix = ublas::prod(transform_camera_reference, transform_moving_camera);
 
 					// TODO: calculate the parameters we need from the transformation matrix.
+					double tx = transformation_matrix(0, 3) / transformation_matrix(3, 3);
+					double ty = transformation_matrix(1, 3) / transformation_matrix(3, 3);
+					double tz = transformation_matrix(2, 3) / transformation_matrix(3, 3);
+					double sy = sqrt(transformation_matrix(0,0) * transformation_matrix(0,0) +  transformation_matrix(1,0) * transformation_matrix(1,0));
+					bool singular = (sy < 1e-6? true: false);
+					double rx, ry, rz;
+					if(!singular) {
+						rx = atan2(transformation_matrix(2,1) , transformation_matrix(2,2));
+						ry = atan2(-transformation_matrix(2,0), sy);
+						rz = atan2(transformation_matrix(1,0), transformation_matrix(0,0));
+					}
+					else {
+						rx = atan2(-transformation_matrix(1,2), transformation_matrix(1,1));
+						ry = atan2(-transformation_matrix(2,0), sy);
+						rz = 0;
+					}
 					// TODO: send our message using ROS or 0MQ or ...
 				}
 				else {
