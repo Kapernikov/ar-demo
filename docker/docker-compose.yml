@@ -7,6 +7,7 @@ services:
         volumes:
             - ${sourcedir}:/opt/source
 
+
     webserver:
         build: python_webserver
         ports:
@@ -26,6 +27,10 @@ services:
             - webserver
         environment:
             - DISPLAY=${DISPLAY}
+        command: /bin/bash
+        depends_on:
+            - webserver
+            - roscore
         volumes:
             - /tmp/.X11-unix:/tmp/.X11-unix
             - ${HOME}/.Xauthority:/root/.Xauthority

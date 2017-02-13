@@ -7,6 +7,6 @@ export webdir=$parent_path/blender
 docker-compose build
 
 docker-compose kill
-docker-compose up
+docker-compose run interactive_shell
 
 
