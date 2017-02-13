@@ -1,15 +1,29 @@
 #!/usr/bin/python3
 
-from flask import Flask, send_from_directory, render_template, send_file,g,session
+from flask import Flask, send_from_directory, render_template, send_file, g, session, make_response
 from flask_socketio import SocketIO, emit
 import eventlet.green.zmq as zmq
 import eventlet
 import json
+from functools import wraps, update_wrapper
+from datetime import datetime
+
 app = Flask(__name__)
 app.secret_key = "boo"
 socketio = SocketIO(app)
 
 
+def nocache(view):
+    @wraps(view)
+    def no_cache(*args, **kwargs):
+        response = make_response(view(*args, **kwargs))
+        response.headers['Last-Modified'] = datetime.now()
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '-1'
+        return response
+        
+    return update_wrapper(no_cache, view)
 
 
 @app.route('/')
@@ -57,14 +71,13 @@ def listen():
         print(string)
         (x,y) = json.loads(string)
         socketio.emit('posupdate', dict(x=x,y=y))
-        #bg_emit()
-        #eventlet.sleep(0.07)
 
 
 eventlet.spawn(listen)
 
 
 @app.route("/<path:path>")
+@nocache
 def send_static(path):
     return send_from_directory('.',path)
 
