@@ -57,60 +57,15 @@ RUN wget https://github.com/Itseez/opencv/archive/3.2.0.zip \
 RUN pip install ipywidgets flake8 pep8 requests bs4 lxml --upgrade pip pandas jupyter seaborn matplotlib iso8601 xlrd xlsxwriter scikit-image scikit-learn tsfresh peakutils
 RUN sh -c "jupyter nbextension enable --py --sys-prefix widgetsnbextension"
 
-# setup environment
-#RUN locale-gen en_US.UTF-8
-#ENV LANG en_US.UTF-8
-
-# setup keys
-RUN apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
-
-# setup sources.list
-RUN echo "deb http://packages.ros.org/ros/ubuntu jessie main" > /etc/apt/sources.list.d/ros-latest.list
-
-# install bootstrap tools
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    python-rosdep \
-    python-rosinstall \
-    python-vcstools \
-    python-pip \
-    python-zmq \
-    && rm -rf /var/lib/apt/lists/*
-
-#RUN python2 -m pip install ipykernel
-#RUN python2 -m ipykernel install --user
-
-#RUN apt-get install eclipse eclipse-cdt eclipse-jdt
-
-
-### install eclipse neon
-RUN cd /opt \
-	&& wget 'http://mirror.ibcp.fr/pub/eclipse//technology/epp/downloads/release/neon/2/eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz' \
-	&& tar -zxf eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
-	&& rm eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
-	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
-
-# bootstrap rosdep
-RUN rosdep init \
-    && rosdep update
 
 RUN echo "deb http://http.debian.net/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
-ENV ROS_DISTRO kinetic
-RUN apt-get update && apt-get install -y openjdk-8-jdk \
-    ros-kinetic-ros-core=1.3.0-0* \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update && apt-get install -y ros-kinetic-camera-info-manager \
-    ros-kinetic-cv-bridge less \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN cd /opt \
 	&& wget 'http://s.baslerweb.com/media/documents/pylon-5.0.5.9000--RC8-x86_64.tar.gz' \
 	&& tar -zxf pylon-5.0.5.9000--RC8-x86_64.tar.gz \
 	&& cd /opt/pylon-5.0.5.9000-x86_64 \
+	&& mkdir -p /etc/udev/rules.d \
 	&& (yes | bash ./setup-usb.sh) \
 	&& cd /opt \
 	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
-
-# default back to python2
-RUN ln -sf /usr/bin/python2.7 /usr/local/bin/python
 
