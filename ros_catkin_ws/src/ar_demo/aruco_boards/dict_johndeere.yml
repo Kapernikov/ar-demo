@@ -1,5 +1,8 @@
 %YAML:1.0
-nmarkers: 1
+nmarkers: 4
 markersize: 4
-tau0: 10
-marker_0: "0111001000110010"
+tau0: 7
+marker_0: "1011110100100110"
+marker_1: "0100110101101011"
+marker_2: "0010011100100001"
+marker_3: "1011100111101001"
