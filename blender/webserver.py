@@ -71,33 +71,6 @@ state = {
 #     (x,y,z) = state['pos']
 #     socketio.emit('posupdate', dict(x=x,y=y,z=z))
 
-
-def ros_to_3js(state_ros):
-    '''
-        in 3js:
-            * X is van links naar rechts
-            * Y is van boven naar onder
-            * Z is van dichtbij naar veraf
-        
-        in ros:
-            * X is van links naar rechts
-            * Y is van veraf naar dichtbij
-            * Z is van boven naar onder
-
-
-    '''
-    state_3js = {}
-    state_3js['x']=state_ros['x']
-    state_3js['y']=state_ros['z']
-    state_3js['z']=state_ros['y']
-
-    state_3js['rx']=state_ros['rx']
-    state_3js['ry']=state_ros['ry']
-    state_3js['rz']=state_ros['rz']
-    return state_3js
-
-
-
 def listen():
     context = zmq.Context()
     socket = context.socket(zmq.SUB)

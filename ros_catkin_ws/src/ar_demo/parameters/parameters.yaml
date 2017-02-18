@@ -182,7 +182,7 @@ camera:
                 x: 1
                 y: 1
             # Framerate.
-            fps: 1.0
+            fps: 5.0
             # Auto exposure settings
             auto:
                 enable: true
@@ -216,7 +216,7 @@ aruco:
 
   reference:
       board_name: 'reference'
-      marker_size_m: 0.028
+      marker_size_m: 0.0364
   johndeere:
       board_name: 'johndeere'
-      marker_size_m: 0.028
+      marker_size_m: 0.0165

@@ -111,7 +111,9 @@ namespace ar_demo {
 					board_detector.getMarkerDetector().setCornerRefinementMethod(aruco::MarkerDetector::LINES);
 					board_detector.getMarkerDetector().setWarpSize((dictionary[0].n() + 2) * 8);
 					board_detector.getMarkerDetector().setMinMaxSize(0.005, 0.5);
-					board_detector.set_repj_err_thres(5.0); // TODO literal constant.
+					// Sets the threshold for reprjection test. Pixels that after estimating the camera location projects 'repj_err_thres' pixels farther from its original location are discarded as outliers. By default it is set to -1, meaning that not reprojection test is performed						
+					// TODO literal constant:
+					board_detector.set_repj_err_thres(5.0); // -1 = no reprojection test
 					// Store in map.
 					dictionary_map_[board_name] = dictionary;
 					board_detector_map_[board_name] = board_detector;
@@ -189,6 +191,7 @@ namespace ar_demo {
 				float probDetect = 0.;
 				try {
 					probDetect = bd.detect(InImage); // TODO
+					ROS_DEBUG_STREAM("Board '" << boardLabel << "' detected with probability " << probDetect << ".");
 				} catch (cv::Exception &e) {
 					cout << "Exception: " << e.what() << endl;
 					probDetect = 0.;
@@ -201,7 +204,7 @@ namespace ar_demo {
 #endif
 				// print board
 				if (camera_parameters_.isValid()) {
-					if (probDetect > 0.70) { // TODO Literal threshold  ==> make parameter
+					if (probDetect > 0.49) { // TODO Literal threshold  ==> make parameter
 						/*
 						 * Add Board to data object
 						 */
@@ -236,8 +239,8 @@ namespace ar_demo {
 				}
 			}
 
-			// Only register those frames where we could find a board
-			if (detectedFrame.boards.size() > 0) {
+			// Only register those frames where we could find 2 boards
+			if (detectedFrame.boards.size() == 2) {
 				ROS_DEBUG_STREAM("Aruco is adding valid detectedFrame in collection.");
 				aruco_results_.frames.push_back(detectedFrame);
 				// TODO: Validation does not count detected markers.
