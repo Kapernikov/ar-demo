@@ -9,6 +9,7 @@ import sys
 from functools import wraps, update_wrapper
 from datetime import datetime
 from optparse import OptionParser
+import math
 
 parser = OptionParser()
 parser.add_option("-n", "--host", dest="zmqhost",
@@ -81,9 +82,25 @@ def listen():
     socket.connect (zmq_url)
     while True:
         string = socket.recv().decode('utf-8')
-        print(string)
         sys.stdout.flush()
         inp = json.loads(string)
+        print(inp)
+        x = inp["x"]
+        y = inp["y"]
+        z = inp["z"]
+        rx = inp["rx"]
+        ry = inp["ry"]
+        rz = inp["rz"]
+
+        inp["x"] = (-1 * x) + 0.35 # X-pos ligt naar links
+        inp["y"] = z - 0.08 # Ik ga er van uit dat de Z as omhoog wijst uit het vlak
+        inp["z"] = y + 0.2
+        inp["rx"] = math.radians(-90) + rx
+        inp["ry"] = -ry
+        inp["rz"] = rz
+
+        print(inp)
+        json.dumps(inp, sort_keys=True)
         socketio.emit('posupdate', inp)
 
 

@@ -156,12 +156,13 @@ namespace ar_demo {
 					// Send message using 0MQ.
 					std::ostringstream msgJson;
 					// Convert to Three.js scale
-					tx = (-tx + 0.35) / 1000 * 2;
-					ty = (ty + 0.35) / 1000 * 2;
-					tz = (tz + 0.022) ;
-					rx = -rx ;
-					ry = rz ;
-					rz = ry ;
+					// Conversie is verhuisd naar main.js					
+					//tx = (-tx + 0.35) / 1000 * 2;
+					//ty = (ty + 0.35) / 1000 * 2;
+					//tz = (tz + 0.022) ;
+					//rx = -rx ;
+					//ry = rz ;
+					//rz = ry ;
 					// Pack Json
 					msgJson << "{\"x\": " << tx << ", \"y\": " << ty << ", \"z\": " << tz << ", "
 						<< "\"rx\": " << rx << ", \"ry\": " << ry << ", \"rz\": " << rz << "}" << std::endl;

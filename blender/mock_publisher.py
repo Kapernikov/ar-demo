@@ -33,22 +33,18 @@ def inc_pos():
 def move_init():
     p = state['pos']
     # Initiële waarden
-    x = 0.5
-    y = 0.5
-    z = 20.0
-    rx = 0
+    x = 0.0
+    y = 0.0
+    z = 0.15
+    rx = -90
     ry = 0
     rz = 0
-    # Voorbeeld Omrekening naar Three.js
-    x = x / 1000 * 2
-    y = y / 1000 * 2
-    z = z / 1000 * 2
     # Pack
     p['x'] = x
     p['y'] = y 
     p['z'] = z
-    p['rx'] = math.radians(rx + 180)
-    p['ry'] = math.radians(ry + 180)
+    p['rx'] = math.radians(rx)
+    p['ry'] = math.radians(ry)
     p['rz'] = math.radians(rz)
     s = json.dumps(p)
     print(s)
