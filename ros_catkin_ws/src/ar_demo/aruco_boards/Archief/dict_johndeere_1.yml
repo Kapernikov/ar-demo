@@ -1,0 +1,5 @@
+%YAML:1.0
+nmarkers: 1
+markersize: 4
+tau0: 10
+marker_0: "0111001000110010"

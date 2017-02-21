@@ -48,6 +48,8 @@ namespace ar_demo {
 			throw std::runtime_error("Unable to get camera information");
 		}
 		// Initialise ArUco facade.
+		ROS_DEBUG_STREAM("ArUcoRelative is using boards: " << reference_board_name_ << " & " << moving_board_name_);
+
 		std::vector<std::string> boards{reference_board_name, moving_board_name};
 		aruco_facade_.initialise(camera_name_, boards);
 		// Initialise 0MQ publisher.
@@ -77,6 +79,7 @@ namespace ar_demo {
 		// Detect ArUco boards.
 		aruco_facade_.detect(image, imageMsg->header.stamp);
 		if(aruco_facade_.hasValidResult()) {
+			ROS_DEBUG("ArUcoRelative spotted valid Aruco result.");
 			ArucoResults aruco_results{aruco_facade_.retrieveResult()};
 			std::vector<DetectedFrame> frames = aruco_results.frames;
 			// Lambda function to convert the board's t and r vectors to a transformation matrix.
@@ -106,7 +109,7 @@ namespace ar_demo {
 				ublas::matrix<double> transform_camera_reference { 4, 4 };
 				ublas::matrix<double> transform_moving_camera;
 				for(auto board = frame->boards.begin(); board != frame->boards.end(); ++board) {
-					ROS_DEBUG_STREAM("Board name '" << *board << "'.");
+					ROS_DEBUG_STREAM("Board '" << *board << "'.");
 					if(board->name == reference_board_name_) {
 						transform_reference_camera = convert_board_to_transformation_matrix(*board);
 						InvertMatrix(transform_reference_camera, transform_camera_reference);
@@ -117,6 +120,7 @@ namespace ar_demo {
 						transform_moving_camera_valid = true;
 					}
 					else {
+						
 						throw std::logic_error("Unexpected initialised ArUco board found.");
 					}
 				}
@@ -151,6 +155,15 @@ namespace ar_demo {
 					}
 					// Send message using 0MQ.
 					std::ostringstream msgJson;
+					// Convert to Three.js scale
+					// Conversie is verhuisd naar main.js					
+					//tx = (-tx + 0.35) / 1000 * 2;
+					//ty = (ty + 0.35) / 1000 * 2;
+					//tz = (tz + 0.022) ;
+					//rx = -rx ;
+					//ry = rz ;
+					//rz = ry ;
+					// Pack Json
 					msgJson << "{\"x\": " << tx << ", \"y\": " << ty << ", \"z\": " << tz << ", "
 						<< "\"rx\": " << rx << ", \"ry\": " << ry << ", \"rz\": " << rz << "}" << std::endl;
 					zmq::message_t message(msgJson.str().size());

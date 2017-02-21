@@ -6,11 +6,11 @@
   <rosparam command="load" file="$(find ar_demo)/parameters/parameters.yaml" />
 
   <!-- Camera node using the camera in real time -->
-  <!-- <node pkg="ar_demo" type="camera_node" name="camera_node" args="&#x002d;&#x002d;camera aca1920_150uc_21917526" respawn="false" required="true" output="screen" /> -->
+  <!--<node pkg="ar_demo" type="camera_node" name="camera_node" args="&#x002d;&#x002d;camera aca2500_20gc_21768100" respawn="false" required="true" output="screen" /> -->
   <!-- Camera node using a previously recorded video. The camera specification is required to pass the camera information to the receiver. -->
-  <node pkg="ar_demo" type="camera_node" name="camera_node" args="&#x002d;&#x002d;camera aca1920_150uc_21917526 &#x002d;&#x002d;replay /opt/source/media/test-camera.avi" respawn="false" required="true" output="screen" />
+  <node pkg="ar_demo" type="camera_node" name="camera_node" args="&#x002d;&#x002d;camera aca2500_20gc_21768100 &#x002d;&#x002d;replay $(find ar_demo)/../../../test.avi" respawn="false" required="true" output="screen" /> 
 
-  <node pkg="ar_demo" type="camera_display_node" name="camera_display_node" args="&#x002d;&#x002d;camera aca1920_150uc_21917526 &#x002d;&#x002d;downsample 4" respawn="false" required="true" output="screen" />
+  <node pkg="ar_demo" type="camera_display_node" name="camera_display_node" args="&#x002d;&#x002d;camera aca2500_20gc_21768100 &#x002d;&#x002d;downsample 4" respawn="false" required="true" output="screen" />
 
-  <node pkg="ar_demo" type="aruco_relative_node" name="aruco_relative_node" args="&#x002d;&#x002d;camera aca1920_150uc_21917526 &#x002d;&#x002d;board-reference reference &#x002d;&#x002d;board-moving johndeere" respawn="false" required="true" output="screen" />
+  <node pkg="ar_demo" type="aruco_relative_node" name="aruco_relative_node" args="&#x002d;&#x002d;camera aca2500_20gc_21768100 &#x002d;&#x002d;board-reference reference &#x002d;&#x002d;board-moving johndeere" respawn="false" required="true" output="screen" />
 </launch>

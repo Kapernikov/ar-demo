@@ -167,7 +167,41 @@ camera:
             limits:
                 gain_db_max: 12.0
                 illuminance_lux_min: 500.0
-
+    aca2500_20gc_21768100:
+        hardware:
+            driver: 'BaslerPylonGigE'
+            model: 'acA2500-20gc' # Just remove if you want to use any model.
+            serialnumber: '21768100' # Just remove if you want to use any serial number.
+            # userdefinedname: '' # Just remove if you want to use any user defined name.
+            mode: 'color'
+            image_transmission_us: 6000
+            aperture: 2.0 # to estimate light level in lux
+            ev_correction: 0 # NOTE: not calibrated
+        settings:
+            binning:
+                x: 1
+                y: 1
+            # Framerate.
+            fps: 5.0
+            # Auto exposure settings
+            auto:
+                enable: true
+                # Exposure time tussen kleine marge in de buurt van een lichtnet periode
+                exposure_us_min: 500.0
+                exposure_us_max: 20000.0
+                gain_db_min: 155.0
+                gain_db_max: 618.0
+                target_brightness: 0.50
+            # Manual exposure settings (used if ae/enable != true).
+            manual:
+                exposure_us: 20000.0 # Default 60000
+                gain_db: 155.0 # Default GigE 155
+                # Pylon 4 preset Tungsten (2800K) => R: 1.16968, G: 1.0, B: 3.45972
+                # Pylon 4 preset Daylight (5000K) => R: 1.7395, G: 1.0, B: 1.96069
+                # Pylon 4 preset Daylight (6500K) => R: 1.94458, G: 1.0, B: 1.71997
+                balance_red: 2.0
+                balance_green: 1.0
+                balance_blue: 2.0
 
 ####################################################################################################
 #
@@ -182,7 +216,7 @@ aruco:
 
   reference:
       board_name: 'reference'
-      marker_size_m: 0.028
+      marker_size_m: 0.0364
   johndeere:
       board_name: 'johndeere'
-      marker_size_m: 0.028
+      marker_size_m: 0.0165

@@ -1,0 +1,20 @@
+image_width: 2592
+image_height: 2048
+camera_name: aca2500_20gc_21768100
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [1753.794230113235, 0, 1313.225693068923, 0, 1746.519913064595, 990.5023460003368, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.170931072393344, 0.1511830831245177, -0.0005406901135899003, -0.001311075650721157, -0.07131052970457058]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [1753.794230113235, 0, 1313.225693068923, 0, 0, 1746.519913064595, 990.5023460003368, 0, 0, 0, 1, 0]
