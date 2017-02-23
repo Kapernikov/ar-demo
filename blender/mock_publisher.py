@@ -13,11 +13,11 @@ if len(sys.argv) > 1:
 context = zmq.Context()
 socket = context.socket(zmq.PUB)
 socket.bind("tcp://*:%s" % port)
-time.sleep(0.5) # Omdat we anders nog geen connectie hebben. Eerste berichtje(s) gaan verloren richting Zero-MQ
+time.sleep(0.7) # Omdat we anders nog geen connectie hebben. Eerste berichtje(s) gaan verloren richting Zero-MQ
 
 state = {
     # Betekenis van de assen. Zie Readme.md
-    'pos': dict(x=0.0, y=0.0, z=2.2, rx=math.radians(-90), ry=math.radians(0), rz=math.radians(180)) # Set initial position here
+    'pos': dict(x=0, y=0, z=0, rx=0, ry=0, rz=0) # Set initial position here
 }
 
 def inc_pos():
@@ -32,15 +32,31 @@ def inc_pos():
 
 def move_init():
     p = state['pos']
+    # Initiële waarden
+    x = 0.0
+    y = 0.0
+    z = 0.15
+    rx = -90
+    ry = 0
+    rz = 0
+    # Pack
+    p['x'] = x
+    p['y'] = y 
+    p['z'] = z
+    p['rx'] = math.radians(rx)
+    p['ry'] = math.radians(ry)
+    p['rz'] = math.radians(rz)
     s = json.dumps(p)
     print(s)
     socket.send_string(s)
 
 
 # Move to initial position
+
+
 move_init()
 
-while True:
+while False:
     inc_pos()
     p = state['pos']
     s = json.dumps(p)
