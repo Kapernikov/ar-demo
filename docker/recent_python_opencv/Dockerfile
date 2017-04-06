@@ -1,4 +1,4 @@
-FROM python:3.5
+FROM ubuntu:17.04
 MAINTAINER Frank Dekervel <frank@kapernikov.com>
 
 RUN apt-get update && \
@@ -16,12 +16,11 @@ RUN apt-get update && \
         libjpeg-dev \
         libpng-dev \
         libtiff-dev \
-        libjasper-dev \
         libavformat-dev \
         libpq-dev \
-	llvm-dev
+	llvm-dev python3-pip
 
-RUN pip install numpy
+RUN pip3 install numpy
 
 WORKDIR /
 RUN wget https://github.com/Itseez/opencv/archive/3.2.0.zip \
@@ -54,18 +53,23 @@ RUN wget https://github.com/Itseez/opencv/archive/3.2.0.zip \
 && rm -r /opencv-3.2.0 \
 && rm -r /opencv_contrib-3.2.0
 
-RUN pip install ipywidgets flake8 pep8 requests bs4 lxml --upgrade pip pandas jupyter seaborn matplotlib iso8601 xlrd xlsxwriter scikit-image scikit-learn tsfresh peakutils
+RUN pip3 install ipywidgets flake8 pep8 requests bs4 lxml --upgrade pip pandas jupyter seaborn matplotlib iso8601 xlrd xlsxwriter scikit-image scikit-learn tsfresh peakutils
 RUN sh -c "jupyter nbextension enable --py --sys-prefix widgetsnbextension"
 
 
 RUN echo "deb http://http.debian.net/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
 
-RUN cd /opt \
-	&& wget 'http://s.baslerweb.com/media/documents/pylon-5.0.5.9000--RC8-x86_64.tar.gz' \
-	&& tar -zxf pylon-5.0.5.9000--RC8-x86_64.tar.gz \
-	&& cd /opt/pylon-5.0.5.9000-x86_64 \
-	&& mkdir -p /etc/udev/rules.d \
-	&& (yes | bash ./setup-usb.sh) \
-	&& cd /opt \
-	&& tar -zxf /opt/pylon-5.0.5.9000-x86_64/pylonSDK-5.0.5.9000-x86_64.tar.gz
+#RUN apt-get update && apt-get install -y software-properties-common \
+#    && add-apt-repository ppa:webupd8team/java -y  && apt-get update \
+#    && apt-get install -y oracle-java8-installer oracle-java8-set-default \
+#    ros-indigo-camera-info-manager ros-indigo-cv-bridge less vim joe libavcodec-extra \
+#    && rm -rf /var/lib/apt/lists/*
 
+
+RUN apt-get update && apt-get -y  install openjdk-9-jdk
+
+RUN cd /opt \
+	&& wget 'http://mirror.ibcp.fr/pub/eclipse//technology/epp/downloads/release/neon/2/eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz' \
+	&& tar -zxf eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
+	&& rm eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
+	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
