@@ -73,3 +73,14 @@ RUN cd /opt \
 	&& tar -zxf eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
 	&& rm eclipse-cpp-neon-2-linux-gtk-x86_64.tar.gz \
 	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
+
+RUN apt-get update && apt-get -y install libeigen3-dev libflann-dev libvtk6-dev libqhull-dev libopenni-dev 
+RUN apt-get -y install libboost-dev libboost-iostreams-dev libboost-system-dev libboost-filesystem-dev libboost-thread-dev libboost-date-time-dev
+RUN \
+	cd /opt && wget "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.0.tar.gz" &&  \	
+	tar -zxf pcl-1.8.0.tar.gz && \
+	cd pcl-pcl-1.8.0 && mkdir build && cd build && \
+	cmake -DCMAKE_BUILD_TYPE=Release .. && \
+	make -j2 && \
+	make -j2 install
+#RUN apt-get -y install libpcl-dev
