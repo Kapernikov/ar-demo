@@ -1,4 +1,4 @@
-FROM ubuntu:17.04
+FROM ubuntu:16.10
 MAINTAINER Frank Dekervel <frank@kapernikov.com>
 
 RUN apt-get update && \
@@ -75,12 +75,11 @@ RUN cd /opt \
 	&& ln -sf /opt/eclipse/eclipse /usr/local/bin/eclipse
 
 RUN apt-get update && apt-get -y install libeigen3-dev libflann-dev libvtk6-dev libqhull-dev libopenni-dev 
-RUN apt-get -y install libboost-dev libboost-iostreams-dev libboost-system-dev libboost-filesystem-dev libboost-thread-dev libboost-date-time-dev
-RUN \
-	cd /opt && wget "https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.0.tar.gz" &&  \	
-	tar -zxf pcl-1.8.0.tar.gz && \
-	cd pcl-pcl-1.8.0 && mkdir build && cd build && \
-	cmake -DCMAKE_BUILD_TYPE=Release .. && \
-	make -j2 && \
-	make -j2 install
-#RUN apt-get -y install libpcl-dev
+RUN apt-get -y install libpcl-dev pcl-tools cython3
+RUN mkdir -p /opt/source
+WORKDIR /opt/source
+RUN git clone https://github.com/riyasdeen/python-pcl.git
+WORKDIR /opt/source/python-pcl
+RUN cat /usr/lib/x86_64-linux-gnu/pkgconfig/pcl_features-1.8.pc | sed -e 's|\spcl_2d-1.8||g;' > /tmp/n.pc && cp /tmp/n.pc  /usr/lib/x86_64-linux-gnu/pkgconfig/pcl_features-1.8.pc
+RUN cat pcl/__init__.py  | sed -e 's|from\s\.pcl_visualization|\#NO PCL_VIS|g;' >  pcl/__init__.py-new && mv pcl/__init__.py-new pcl/__init__.py && python3 setup.py install
+
