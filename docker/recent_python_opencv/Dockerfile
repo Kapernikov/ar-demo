@@ -83,3 +83,11 @@ WORKDIR /opt/source/python-pcl
 RUN cat /usr/lib/x86_64-linux-gnu/pkgconfig/pcl_features-1.8.pc | sed -e 's|\spcl_2d-1.8||g;' > /tmp/n.pc && cp /tmp/n.pc  /usr/lib/x86_64-linux-gnu/pkgconfig/pcl_features-1.8.pc
 RUN cat pcl/__init__.py  | sed -e 's|from\s\.pcl_visualization|\#NO PCL_VIS|g;' >  pcl/__init__.py-new && mv pcl/__init__.py-new pcl/__init__.py && python3 setup.py install
 
+WORKDIR /opt/source
+RUN git clone https://github.com/lovepark/libo3d3xx.git
+WORKDIR /opt/source/libo3d3xx 
+RUN apt-get -y  install libgoogle-glog-dev libxmlrpc-c++8-dev libgtest-dev
+#RUN mkdir build && cd build && cmake .. && make
+RUN cd modules/camera && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make install
+RUN cd modules/framegrabber && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make install
+RUN cd modules/image && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && make install
